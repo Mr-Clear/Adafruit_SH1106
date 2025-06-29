@@ -25,11 +25,12 @@ However, SH1106 driver don't provide several functions such as scroll commands.
 
 
 *********************************************************************/
-
-#include <avr/pgmspace.h>
-#ifndef __SAM3X8E__
- #include <util/delay.h>
+#ifdef __AVR__
+  #include <avr/pgmspace.h>
+#else
+  #include <pgmspace.h>
 #endif
+
 #include <stdlib.h>
 
 #include <Wire.h>
@@ -547,7 +548,7 @@ void Adafruit_SH1106::display(void) {
 	else{
 		
 	 // save I2C bitrate
-	#ifndef __SAM3X8E__
+	#if !defined(__SAM3X8E__) && !defined(ESP32) && !defined(ESP_PLATFORM)
     		uint8_t twbrbackup = TWBR;
     		TWBR = 12; // upgrade to 400KHz!
 	#endif
@@ -569,7 +570,7 @@ void Adafruit_SH1106::display(void) {
         	}
 	}
 	
-	#ifndef __SAM3X8E__
+	#if !defined(__SAM3X8E__) && !defined(ESP32) && !defined(ESP_PLATFORM)
     		TWBR = twbrbackup;
 	#endif
 	}
